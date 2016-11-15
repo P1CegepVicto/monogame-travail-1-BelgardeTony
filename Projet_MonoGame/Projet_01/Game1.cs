@@ -158,17 +158,18 @@ namespace Projet_01
 
             if (mexican.estVivant == false)
             {
-                //if (Keyboard.GetState().IsKeyDown(Keys.Enter))
-                //{
-                //    mexican.estVivant = true;
-                //    mexican.position.X = Hillary.position.X + 50;
-                //    mexican.position.Y = Hillary.position.Y + 165;
-                //}
-                mexican.estVivant = true;
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                {
+                    //    mexican.estVivant = true;
+                    //    mexican.position.X = Hillary.position.X + 50;
+                    //    mexican.position.Y = Hillary.position.Y + 165;
+                    
+                }
                 mexican.position.X = Hillary.position.X + 50;
                 mexican.position.Y = Hillary.position.Y + 165;
+                mexican.estVivant = true;
             }
-
+               
             //*****************Hillary controle********************
             //if (Keyboard.GetState().IsKeyDown(Keys.Left))
             //{
