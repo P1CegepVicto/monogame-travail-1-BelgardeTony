@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projet_01", "Projet_01\Projet_01.csproj", "{9560C525-9499-4805-8554-255A1602E75B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projet_2-Naruto", "Projet_2-Naruto\Projet_2-Naruto.csproj", "{08CF2FB6-EB70-4830-93F3-C7A2CB6428B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -15,6 +17,10 @@ Global
 		{9560C525-9499-4805-8554-255A1602E75B}.Debug|x86.Build.0 = Debug|x86
 		{9560C525-9499-4805-8554-255A1602E75B}.Release|x86.ActiveCfg = Release|x86
 		{9560C525-9499-4805-8554-255A1602E75B}.Release|x86.Build.0 = Release|x86
+		{08CF2FB6-EB70-4830-93F3-C7A2CB6428B9}.Debug|x86.ActiveCfg = Debug|x86
+		{08CF2FB6-EB70-4830-93F3-C7A2CB6428B9}.Debug|x86.Build.0 = Debug|x86
+		{08CF2FB6-EB70-4830-93F3-C7A2CB6428B9}.Release|x86.ActiveCfg = Release|x86
+		{08CF2FB6-EB70-4830-93F3-C7A2CB6428B9}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

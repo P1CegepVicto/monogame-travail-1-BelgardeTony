@@ -12,6 +12,7 @@ namespace Projet_01
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Rectangle fenetre;
+        int rotate = 0;
 
         Texture2D backgroundTexture;
         Texture2D HillaryWin;
@@ -169,7 +170,7 @@ namespace Projet_01
                 mexican.position.Y = Hillary.position.Y + 165;
                 mexican.estVivant = true;
             }
-               
+
             //*****************Hillary controle********************
             //if (Keyboard.GetState().IsKeyDown(Keys.Left))
             //{
@@ -199,6 +200,7 @@ namespace Projet_01
             //    Hillary.position.Y -= 5;
             //}
 
+            rotate += 1;
             // TODO: Add your update logic here
             UpdateHillary();
             Updateprojectil();
@@ -292,7 +294,7 @@ namespace Projet_01
 
                 if (brique.estVivant == true)
                 {
-                    spriteBatch.Draw(brique.sprite, brique.position, Color.White);
+                    spriteBatch.Draw(brique.sprite, brique.position, rotation: rotate);
                 }
                 if (mexican.estVivant == true)
                 {
