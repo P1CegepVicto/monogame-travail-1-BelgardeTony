@@ -76,7 +76,7 @@ namespace Projet_01
             //Limite à droite de X = 1740
             //Limite en hauteur de Y = -15
             //Limite en bas de Y = 885 
-            Trump.position.X = 820;
+            Trump.position.X = 420;
             Trump.position.Y = 850;
             Trump.sprite = Content.Load<Texture2D>("Trump.png");
 
@@ -220,14 +220,20 @@ namespace Projet_01
 
         protected void UpdateHillary()
         {
-            if (Hillary.GetRect().Intersects(brique.GetRect()))
+            if (Hillary.estVivant == true && Trump.estVivant == true)
             {
-                Hillary.estVivant = false;
+                if (Hillary.GetRect().Intersects(brique.GetRect()))
+                {
+                    Hillary.estVivant = false;
+                }
+
+                if (Trump.GetRect().Intersects(mexican.GetRect()))
+                {
+                    Trump.estVivant = false;
+                }
             }
-            if (Trump.GetRect().Intersects(mexican.GetRect()))
-            {
-                Trump.estVivant = false;
-            }
+
+            
 
 
             if (Hillary.position.X < fenetre.Left)
