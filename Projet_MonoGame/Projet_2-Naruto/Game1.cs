@@ -15,12 +15,17 @@ namespace Projet_2_Naruto
         Rectangle fenetre;
         Texture2D background;
         Random random = new Random();
+
         int rotate = 0;
+        int rotate1 = 0;
+        int projectiletirer;
 
         GameObject Naruto;
         GameObject[] Madara;
         GameObject Kunai;
+        GameObject Kunai2;
         GameObject Shuriken;
+        GameObject Shuriken2;
 
         public Game1()
         {
@@ -66,9 +71,17 @@ namespace Projet_2_Naruto
             Kunai.estVivant = false;
             Kunai.sprite = Content.Load<Texture2D>("Kunai.png");
 
+            Kunai2 = new GameObject();
+            Kunai2.estVivant = false;
+            Kunai2.sprite = Content.Load<Texture2D>("Kunai.png");
+
             Shuriken = new GameObject();
             Shuriken.estVivant = false;
             Shuriken.sprite = Content.Load<Texture2D>("Shuriken.png");
+
+            Shuriken2 = new GameObject();
+            Shuriken2.estVivant = false;
+            Shuriken2.sprite = Content.Load<Texture2D>("Shuriken.png");
 
             background = Content.Load<Texture2D>("Background.png");
 
@@ -118,6 +131,7 @@ namespace Projet_2_Naruto
             // TODO: Add your update logic here
 
             rotate -= 1;
+            rotate1 += 1;
             MoveNaruto();
             MoveMadara();
             UpdateProjectile();
@@ -182,6 +196,12 @@ namespace Projet_2_Naruto
 
         protected void MoveMadara()
         {
+            if (Kunai2.estVivant == false && Shuriken2.estVivant == false)
+            {
+                projectiletirer = random.Next(0, 6);
+
+            }
+
             for (int i = Madara.Length - 1; i >= 0; i--)
             {
 
@@ -227,6 +247,24 @@ namespace Projet_2_Naruto
                 {
                     Madara[i].vitesse.X = random.Next(3, 12);
                 }
+                if (projectiletirer == i && Shuriken2.estVivant == false)
+                {
+                    //****************Demander de l'aide a shany***************************
+                    if (Madara[i].position.X > Naruto.position.X)
+                    {
+                        Shuriken2.position.X = Madara[i].position.X + 50;
+                        Shuriken2.position.Y = Madara[i].position.Y + 100;
+                        Shuriken2.estVivant = true;
+                    }
+
+                    if (Madara[i].position.X < Naruto.position.X)
+                    {
+                        Shuriken.position.X = Madara[i].position.X + 50;
+                        Shuriken.position.Y = Madara[i].position.Y + 100;
+                        Shuriken.estVivant = true;
+                    }
+                    //*********************************************************************
+                }
             }
         }
 
@@ -234,17 +272,31 @@ namespace Projet_2_Naruto
         {
            
                 Shuriken.position.X += 20;
-           
+
+                Shuriken2.position.X -= 20;
+
                 Kunai.position.X += 20;
-            
-                if (Shuriken.position.X >= 1920)
+
+                Kunai2.position.X -= 20;
+
+            if (Shuriken.position.X >= 1920)
             {
                 Shuriken.estVivant = false;
+            }
+
+            if (Shuriken2.position.X <= 0)
+            {
+                Shuriken2.estVivant = false;
             }
 
             if (Kunai.position.X >= 1920)
             {
                 Kunai.estVivant = false;
+            }
+
+            if (Kunai2.position.X <= 0)
+            {
+                Kunai2.estVivant = false;
             }
         }
 
@@ -261,12 +313,26 @@ namespace Projet_2_Naruto
             spriteBatch.Draw(Naruto.sprite, Naruto.position, Color.White);
             for (int i = 0; i < Madara.Length; i++)
             {
-                spriteBatch.Draw(Madara[i].sprite, Madara[i].position);
+                if (Madara[i].position.X > Naruto.position.X)
+                {
+                    spriteBatch.Draw(Madara[i].sprite, Madara[i].position);
+                }
+                if (Madara[i].position.X < Naruto.position.X)
+                {
+                    spriteBatch.Draw(Madara[i].sprite, Madara[i].position, effects: SpriteEffects.FlipHorizontally);
+                }
             }
+
             if (Shuriken.estVivant == true)
             {
                 spriteBatch.Draw(Shuriken.sprite, Shuriken.position, origin: new Vector2(37/2, 38/2), rotation:rotate /3);
             }
+
+            if (Shuriken2.estVivant == true)
+            {
+                spriteBatch.Draw(Shuriken2.sprite, Shuriken2.position, origin: new Vector2(37/2, 38/2), rotation: rotate1 / 3);
+            }
+
             if (Kunai.estVivant == true)
             {
                 spriteBatch.Draw(Kunai.sprite, Kunai.position);
