@@ -15,6 +15,7 @@ namespace Projet_2_Naruto
         Rectangle fenetre;
         Texture2D background;
         Random random = new Random();
+        SpriteFont Text;
 
         int rotate = 0;
         int rotate1 = 0;
@@ -84,6 +85,7 @@ namespace Projet_2_Naruto
             Shuriken2.sprite = Content.Load<Texture2D>("Shuriken.png");
 
             background = Content.Load<Texture2D>("Background.png");
+            Text = Content.Load<SpriteFont>("Font");
 
             Madara = new GameObject[5];
 
@@ -247,6 +249,24 @@ namespace Projet_2_Naruto
                 {
                     Madara[i].vitesse.X = random.Next(3, 12);
                 }
+                if (Naruto.estVivant == true && Madara[i].estVivant == true)
+                {
+                    if (Naruto.GetRect().Intersects(Shuriken2.GetRect()) && Naruto.GetRect().Intersects(Shuriken.GetRect()))
+                    {
+                        Naruto.estVivant = false;
+                    }
+
+                    if (Madara[i].GetRect().Intersects(Shuriken.GetRect()) && Madara[i].GetRect().Intersects(Kunai.GetRect()))
+                    {
+                        Madara[i].estVivant = false;
+                    }
+
+                    if (Madara[i].GetRect().Intersects(Naruto.GetRect()))
+                    {
+                        Naruto.estVivant = false;
+                    }
+                }
+
                 if (projectiletirer == i && Shuriken2.estVivant == false)
                 {
                     //****************Demander de l'aide a shany***************************
@@ -257,7 +277,7 @@ namespace Projet_2_Naruto
                         Shuriken2.estVivant = true;
                     }
 
-                    if (Madara[i].position.X < Naruto.position.X)
+                    else if (Madara[i].position.X < Naruto.position.X)
                     {
                         Shuriken.position.X = Madara[i].position.X + 50;
                         Shuriken.position.Y = Madara[i].position.Y + 100;
@@ -300,6 +320,8 @@ namespace Projet_2_Naruto
             }
         }
 
+       
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -309,6 +331,8 @@ namespace Projet_2_Naruto
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
 
+
+            spriteBatch.DrawString(Text, gameTime.TotalGameTime.TotalSeconds.ToString(), new Vector2(50, 50), Color.Black);
             spriteBatch.Draw(background, new Rectangle(0, 0, graphics.GraphicsDevice.DisplayMode.Width, graphics.GraphicsDevice.DisplayMode.Height), Color.White);
             spriteBatch.Draw(Naruto.sprite, Naruto.position, Color.White);
             for (int i = 0; i < Madara.Length; i++)
@@ -337,7 +361,6 @@ namespace Projet_2_Naruto
             {
                 spriteBatch.Draw(Kunai.sprite, Kunai.position);
             }
-
 
 
             spriteBatch.End();
