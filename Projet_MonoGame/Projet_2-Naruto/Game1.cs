@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 
 namespace Projet_2_Naruto
@@ -14,19 +15,26 @@ namespace Projet_2_Naruto
         SpriteBatch spriteBatch;
         Rectangle fenetre;
         Texture2D background;
+        Texture2D Mort;
+        Texture2D Gameover;
         Random random = new Random();
         SpriteFont Text;
+        SpriteFont score;
+        SpriteFont Vie;
 
         int rotate = 0;
         int rotate1 = 0;
         int projectiletirer;
+        int kills = 0;
+        int dead = 3;
+        int kill ;
 
         GameObject Naruto;
         GameObject[] Madara;
         GameObject Kunai;
-        GameObject Kunai2;
         GameObject Shuriken;
         GameObject Shuriken2;
+        GameObject Shuriken3;
 
         public Game1()
         {
@@ -61,20 +69,18 @@ namespace Projet_2_Naruto
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            Song song = Content.Load<Song>("sound//ThemeSong");
+            MediaPlayer.Play(song);
+
             Naruto = new GameObject();
             Naruto.estVivant = true;
             Naruto.sprite = Content.Load<Texture2D>("Naruto.png");
             Naruto.position.X = 0;
-            Naruto.position.Y = 0;
-
+            Naruto.position.Y = 200;
 
             Kunai = new GameObject();
             Kunai.estVivant = false;
             Kunai.sprite = Content.Load<Texture2D>("Kunai.png");
-
-            Kunai2 = new GameObject();
-            Kunai2.estVivant = false;
-            Kunai2.sprite = Content.Load<Texture2D>("Kunai.png");
 
             Shuriken = new GameObject();
             Shuriken.estVivant = false;
@@ -84,10 +90,21 @@ namespace Projet_2_Naruto
             Shuriken2.estVivant = false;
             Shuriken2.sprite = Content.Load<Texture2D>("Shuriken.png");
 
+            Shuriken3 = new GameObject();
+            Shuriken3.estVivant = false;
+            Shuriken3.sprite = Content.Load<Texture2D>("Shuriken.png");
+
             background = Content.Load<Texture2D>("Background.png");
+            Mort = Content.Load<Texture2D>("Dead.jpg");
+            Gameover = Content.Load<Texture2D>("Gameover.png");
+
             Text = Content.Load<SpriteFont>("Font");
+            score = Content.Load<SpriteFont>("Font");
+            Vie = Content.Load<SpriteFont>("Font");
 
             Madara = new GameObject[5];
+
+            
 
             for (int i = 0; i < Madara.Length; i++)
             {
@@ -100,6 +117,7 @@ namespace Projet_2_Naruto
                 Madara[i].sprite = Content.Load<Texture2D>("Madara.png");
 
             }
+
 
             //******************************
             //Limite à gauche de X = 0
@@ -129,6 +147,8 @@ namespace Projet_2_Naruto
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            kill = kills;
 
             // TODO: Add your update logic here
 
@@ -175,30 +195,34 @@ namespace Projet_2_Naruto
                 }
 
             }
-            if (Shuriken.estVivant == false && Kunai.estVivant == false)
-            {
-                if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                {
-                    Shuriken.estVivant = true;
-                    Shuriken.position.X = Naruto.position.X + 200 ;
-                    Shuriken.position.Y = Naruto.position.Y + 50;
-                }
-            }
 
-            if (Kunai.estVivant == false && Shuriken.estVivant == false)
+            if (Naruto.estVivant == true)
             {
-                if(Keyboard.GetState().IsKeyDown(Keys.Enter))
+                if (Shuriken.estVivant == false && Kunai.estVivant == false)
                 {
-                    Kunai.estVivant = true;
-                    Kunai.position.X = Naruto.position.X + 200;
-                    Kunai.position.Y = Naruto.position.Y + 50;
+                    if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                    {
+                        Shuriken.estVivant = true;
+                        Shuriken.position.X = Naruto.position.X + 200;
+                        Shuriken.position.Y = Naruto.position.Y + 50;
+                    }
+                }
+
+                if (Kunai.estVivant == false && Shuriken.estVivant == false)
+                {
+                    if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                    {
+                        Kunai.estVivant = true;
+                        Kunai.position.X = Naruto.position.X + 200;
+                        Kunai.position.Y = Naruto.position.Y + 50;
+                    }
                 }
             }
         }
 
         protected void MoveMadara()
         {
-            if (Kunai2.estVivant == false && Shuriken2.estVivant == false)
+            if (Shuriken2.estVivant == false)
             {
                 projectiletirer = random.Next(0, 6);
 
@@ -249,55 +273,109 @@ namespace Projet_2_Naruto
                 {
                     Madara[i].vitesse.X = random.Next(3, 12);
                 }
-                if (Naruto.estVivant == true && Madara[i].estVivant == true)
+
+                if (Naruto.estVivant == true && Madara[i].estVivant == true && Shuriken.estVivant == true || Shuriken2.estVivant == true || Shuriken3.estVivant == true || Kunai.estVivant == true)
                 {
-                    if (Naruto.GetRect().Intersects(Shuriken2.GetRect()) && Naruto.GetRect().Intersects(Shuriken.GetRect()))
+                    if (Madara[i].estVivant == true && Naruto.estVivant == true)
                     {
-                        Naruto.estVivant = false;
+                        if (Naruto.GetRect().Intersects(Madara[i].GetRect()))
+                        {
+                            Naruto.estVivant = false;
+                            Shuriken2.estVivant = false;
+                            Shuriken3.estVivant = false;
+                            dead -= 1;
+                        }
+                    }
+                    if (Naruto.estVivant == true)
+                    {
+                        if (Naruto.GetRect().Intersects(Shuriken2.GetRect()) || Naruto.GetRect().Intersects(Shuriken3.GetRect()))
+                        {
+                            Naruto.estVivant = false;
+                            Shuriken2.estVivant = false;
+                            Shuriken3.estVivant = false;
+                            dead -= 1;
+                        }
                     }
 
-                    if (Madara[i].GetRect().Intersects(Shuriken.GetRect()) && Madara[i].GetRect().Intersects(Kunai.GetRect()))
+                    if (Madara[i].GetRect().Intersects(Shuriken.GetRect()))
                     {
                         Madara[i].estVivant = false;
+                        Shuriken3.estVivant = false;
+                        Shuriken2.estVivant = false;
+                        kills += 1;
+
+                        if (Madara[i].estVivant == false)
+                        {
+                            Madara[i].estVivant = true;
+                            Madara[i].position.X = 1600;
+                            Madara[i].position.Y = random.Next();
+                            Madara[i].vitesse.X = random.Next(3, 9);
+                            Madara[i].vitesse.Y = random.Next(3, 9);
+                        }
                     }
 
-                    if (Madara[i].GetRect().Intersects(Naruto.GetRect()))
+                    if (Madara[i].GetRect().Intersects(Kunai.GetRect()))
                     {
-                        Naruto.estVivant = false;
+                        Madara[i].estVivant = false;
+                        Shuriken3.estVivant = false;
+                        Shuriken2.estVivant = false;
+                        kills += 2;
+
+                        if (Madara[i].estVivant == false)
+                        {
+                            Madara[i].estVivant = true;
+                            Madara[i].position.X = 1600;
+                            Madara[i].position.Y = random.Next();
+                            Madara[i].vitesse.X = random.Next(3, 9);
+                            Madara[i].vitesse.Y = random.Next(3, 9);
+                        }
+                    }
+                }
+                if (Naruto.estVivant == false)
+                {
+                    if (Keyboard.GetState().IsKeyDown(Keys.Back))
+                    {
+                        Naruto.estVivant = true;
+                        Naruto.position.X = 0;
+                        Naruto.position.Y = 0;
+
                     }
                 }
 
-                if (projectiletirer == i && Shuriken2.estVivant == false)
+                if (projectiletirer == i && Shuriken2.estVivant == false && Shuriken3.estVivant == false)
                 {
-                    //****************Demander de l'aide a shany***************************
-                    if (Madara[i].position.X > Naruto.position.X)
+                    if (Madara[i].estVivant == true)
                     {
-                        Shuriken2.position.X = Madara[i].position.X + 50;
-                        Shuriken2.position.Y = Madara[i].position.Y + 100;
-                        Shuriken2.estVivant = true;
-                    }
+                        if (Madara[i].position.X > Naruto.position.X)
+                        {
+                            Shuriken2.position.X = Madara[i].position.X + 50;
+                            Shuriken2.position.Y = Madara[i].position.Y + 100;
+                            Shuriken2.estVivant = true;
+                        }
 
-                    else if (Madara[i].position.X < Naruto.position.X)
-                    {
-                        Shuriken.position.X = Madara[i].position.X + 50;
-                        Shuriken.position.Y = Madara[i].position.Y + 100;
-                        Shuriken.estVivant = true;
+                        else if (Madara[i].position.X < Naruto.position.X)
+                        {
+                            Shuriken3.position.X = Madara[i].position.X + 50;
+                            Shuriken3.position.Y = Madara[i].position.Y + 100;
+                            Shuriken3.estVivant = true;
+                        }
                     }
-                    //*********************************************************************
                 }
             }
         }
 
         protected void UpdateProjectile()
         {
-           
-                Shuriken.position.X += 20;
 
-                Shuriken2.position.X -= 20;
+            Shuriken.position.X += 40;
 
-                Kunai.position.X += 20;
+            Kunai.position.X += 40;
 
-                Kunai2.position.X -= 20;
+            Shuriken2.position.X -= 20;
+
+            Shuriken3.position.X += 20;
+
+
 
             if (Shuriken.position.X >= 1920)
             {
@@ -309,18 +387,16 @@ namespace Projet_2_Naruto
                 Shuriken2.estVivant = false;
             }
 
+            if (Shuriken3.position.X >= 1920)
+            {
+                Shuriken3.estVivant = false;
+            }
+
             if (Kunai.position.X >= 1920)
             {
                 Kunai.estVivant = false;
             }
-
-            if (Kunai2.position.X <= 0)
-            {
-                Kunai2.estVivant = false;
-            }
         }
-
-       
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -332,20 +408,33 @@ namespace Projet_2_Naruto
             spriteBatch.Begin();
 
 
-            spriteBatch.DrawString(Text, gameTime.TotalGameTime.TotalSeconds.ToString(), new Vector2(50, 50), Color.Black);
+            
+
             spriteBatch.Draw(background, new Rectangle(0, 0, graphics.GraphicsDevice.DisplayMode.Width, graphics.GraphicsDevice.DisplayMode.Height), Color.White);
-            spriteBatch.Draw(Naruto.sprite, Naruto.position, Color.White);
-            for (int i = 0; i < Madara.Length; i++)
+
+            if (Naruto.estVivant == true)
             {
-                if (Madara[i].position.X > Naruto.position.X)
-                {
-                    spriteBatch.Draw(Madara[i].sprite, Madara[i].position);
-                }
-                if (Madara[i].position.X < Naruto.position.X)
-                {
-                    spriteBatch.Draw(Madara[i].sprite, Madara[i].position, effects: SpriteEffects.FlipHorizontally);
-                }
+                spriteBatch.Draw(Naruto.sprite, Naruto.position, Color.White);
             }
+            
+                for (int i = 0; i < Madara.Length; i++)
+                {
+                    if (Madara[i].position.X > Naruto.position.X)
+                    {
+                        if (Madara[i].estVivant == true)
+                        {
+                            spriteBatch.Draw(Madara[i].sprite, Madara[i].position);
+                        }
+                    }
+
+                    if (Madara[i].position.X < Naruto.position.X)
+                    {
+                        if (Madara[i].estVivant == true)
+                        {
+                            spriteBatch.Draw(Madara[i].sprite, Madara[i].position, effects: SpriteEffects.FlipHorizontally);
+                        }
+                    }
+                }
 
             if (Shuriken.estVivant == true)
             {
@@ -357,11 +446,30 @@ namespace Projet_2_Naruto
                 spriteBatch.Draw(Shuriken2.sprite, Shuriken2.position, origin: new Vector2(37/2, 38/2), rotation: rotate1 / 3);
             }
 
+            if (Shuriken3.estVivant == true)
+            {
+                spriteBatch.Draw(Shuriken3.sprite, Shuriken3.position, origin: new Vector2(37 / 2, 38 / 2), rotation: rotate / 3);
+            }
+
             if (Kunai.estVivant == true)
             {
                 spriteBatch.Draw(Kunai.sprite, Kunai.position);
             }
 
+            spriteBatch.DrawString(Text, "time:" + gameTime.TotalGameTime.TotalSeconds.ToString(), new Vector2(50, 0), Color.Black);
+
+            spriteBatch.DrawString(score, " Score: " + kills.ToString(), new Vector2(1700, 0), Color.Black);
+
+            spriteBatch.DrawString(Vie, " Vie: " + dead.ToString(), new Vector2(850, 0), Color.Black);
+
+            if (dead <= 0 && Naruto.estVivant == false)
+            {
+                spriteBatch.Draw(Mort, new Rectangle(0, 0, graphics.GraphicsDevice.DisplayMode.Width, graphics.GraphicsDevice.DisplayMode.Height), Color.White);
+
+                spriteBatch.Draw(Gameover, new Rectangle(0, 0, graphics.GraphicsDevice.DisplayMode.Width, graphics.GraphicsDevice.DisplayMode.Height), Color.White);
+
+                spriteBatch.DrawString(score, " Score: " + kill.ToString(), new Vector2(850, 600), Color.White);
+            }
 
             spriteBatch.End();
             // TODO: Add your drawing code here
