@@ -26,8 +26,8 @@ namespace Projet_2_Naruto
         int rotate1 = 0;
         int projectiletirer;
         int kills = 0;
-        int dead = 3;
-        int kill ;
+        int dead = 10;
+        int kill;
 
         GameObject Naruto;
         GameObject[] Madara;
@@ -103,8 +103,6 @@ namespace Projet_2_Naruto
             Vie = Content.Load<SpriteFont>("Font");
 
             Madara = new GameObject[5];
-
-            
 
             for (int i = 0; i < Madara.Length; i++)
             {
@@ -300,6 +298,7 @@ namespace Projet_2_Naruto
                     if (Madara[i].GetRect().Intersects(Shuriken.GetRect()))
                     {
                         Madara[i].estVivant = false;
+                        Shuriken.estVivant = false;
                         Shuriken3.estVivant = false;
                         Shuriken2.estVivant = false;
                         kills += 1;
@@ -317,6 +316,7 @@ namespace Projet_2_Naruto
                     if (Madara[i].GetRect().Intersects(Kunai.GetRect()))
                     {
                         Madara[i].estVivant = false;
+                        Kunai.estVivant = false;
                         Shuriken3.estVivant = false;
                         Shuriken2.estVivant = false;
                         kills += 2;
@@ -330,7 +330,35 @@ namespace Projet_2_Naruto
                             Madara[i].vitesse.Y = random.Next(3, 9);
                         }
                     }
+
+                    if (Kunai.estVivant == true || Shuriken.estVivant == true && Shuriken2.estVivant == true || Shuriken3.estVivant == true)
+                    {
+                        if(Kunai.GetRect().Intersects(Shuriken3.GetRect()))
+                        {
+                            Kunai.estVivant = false;
+                            Shuriken3.estVivant = false;
+                        }
+
+                        if (Kunai.GetRect().Intersects(Shuriken2.GetRect()))
+                        {
+                            Kunai.estVivant = false;
+                            Shuriken2.estVivant = false;
+                        }
+
+                        if (Shuriken.GetRect().Intersects(Shuriken2.GetRect()))
+                        {
+                            Shuriken.estVivant = false;
+                            Shuriken2.estVivant = false;
+                        }
+
+                        if (Shuriken.GetRect().Intersects(Shuriken3.GetRect()))
+                        {
+                            Shuriken.estVivant = false;
+                            Shuriken3.estVivant = false;
+                        }
+                    }
                 }
+
                 if (Naruto.estVivant == false)
                 {
                     if (Keyboard.GetState().IsKeyDown(Keys.Back))
@@ -412,6 +440,12 @@ namespace Projet_2_Naruto
 
             spriteBatch.Draw(background, new Rectangle(0, 0, graphics.GraphicsDevice.DisplayMode.Width, graphics.GraphicsDevice.DisplayMode.Height), Color.White);
 
+            spriteBatch.DrawString(Text, "time:" + gameTime.TotalGameTime.TotalSeconds.ToString(), new Vector2(50, 0), Color.Black);
+
+            spriteBatch.DrawString(score, " Score: " + kills.ToString(), new Vector2(1700, 0), Color.Black);
+
+            spriteBatch.DrawString(Vie, " Vie: " + dead.ToString(), new Vector2(850, 0), Color.Black);
+
             if (Naruto.estVivant == true)
             {
                 spriteBatch.Draw(Naruto.sprite, Naruto.position, Color.White);
@@ -455,13 +489,7 @@ namespace Projet_2_Naruto
             {
                 spriteBatch.Draw(Kunai.sprite, Kunai.position);
             }
-
-            spriteBatch.DrawString(Text, "time:" + gameTime.TotalGameTime.TotalSeconds.ToString(), new Vector2(50, 0), Color.Black);
-
-            spriteBatch.DrawString(score, " Score: " + kills.ToString(), new Vector2(1700, 0), Color.Black);
-
-            spriteBatch.DrawString(Vie, " Vie: " + dead.ToString(), new Vector2(850, 0), Color.Black);
-
+            
             if (dead <= 0 && Naruto.estVivant == false)
             {
                 spriteBatch.Draw(Mort, new Rectangle(0, 0, graphics.GraphicsDevice.DisplayMode.Width, graphics.GraphicsDevice.DisplayMode.Height), Color.White);
