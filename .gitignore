@@ -240,3 +240,7 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+Test/Test.sln
+Test/Game1/Activity1.cs
+Test/Game1/Assets/AboutAssets.txt
+Test/Game1/Game1.cs

@@ -284,7 +284,7 @@ namespace Projet_2_Naruto
                             dead -= 1;
                         }
                     }
-                    if (Naruto.estVivant == true)
+                    if (Naruto.estVivant == true && Shuriken2.estVivant == true || Shuriken3.estVivant == true)
                     {
                         if (Naruto.GetRect().Intersects(Shuriken2.GetRect()) || Naruto.GetRect().Intersects(Shuriken3.GetRect()))
                         {
@@ -295,42 +295,48 @@ namespace Projet_2_Naruto
                         }
                     }
 
-                    if (Madara[i].GetRect().Intersects(Shuriken.GetRect()))
+                    if (Shuriken.estVivant == true && Madara[i].estVivant == true && Naruto.estVivant == true)
                     {
-                        Madara[i].estVivant = false;
-                        Shuriken.estVivant = false;
-                        Shuriken3.estVivant = false;
-                        Shuriken2.estVivant = false;
-                        kills += 1;
 
-                        if (Madara[i].estVivant == false)
+                        if (Madara[i].GetRect().Intersects(Shuriken.GetRect()))
                         {
-                            Madara[i].estVivant = true;
-                            Madara[i].position.X = 1600;
-                            Madara[i].position.Y = random.Next();
-                            Madara[i].vitesse.X = random.Next(3, 9);
-                            Madara[i].vitesse.Y = random.Next(3, 9);
+                            Madara[i].estVivant = false;
+                            Shuriken.estVivant = false;
+                            Shuriken3.estVivant = false;
+                            Shuriken2.estVivant = false;
+                            kills += 1;
+
+                            if (Madara[i].estVivant == false)
+                            {
+                                Madara[i].estVivant = true;
+                                Madara[i].position.X = 1600;
+                                Madara[i].position.Y = random.Next();
+                                Madara[i].vitesse.X = random.Next(3, 9);
+                                Madara[i].vitesse.Y = random.Next(3, 9);
+                            }
                         }
                     }
 
-                    if (Madara[i].GetRect().Intersects(Kunai.GetRect()))
+                    if (Kunai.estVivant == true && Naruto.estVivant == true && Madara[i].estVivant == true)
                     {
-                        Madara[i].estVivant = false;
-                        Kunai.estVivant = false;
-                        Shuriken3.estVivant = false;
-                        Shuriken2.estVivant = false;
-                        kills += 2;
-
-                        if (Madara[i].estVivant == false)
+                        if (Madara[i].GetRect().Intersects(Kunai.GetRect()))
                         {
-                            Madara[i].estVivant = true;
-                            Madara[i].position.X = 1600;
-                            Madara[i].position.Y = random.Next();
-                            Madara[i].vitesse.X = random.Next(3, 9);
-                            Madara[i].vitesse.Y = random.Next(3, 9);
+                            Madara[i].estVivant = false;
+                            Kunai.estVivant = false;
+                            Shuriken3.estVivant = false;
+                            Shuriken2.estVivant = false;
+                            kills += 2;
+
+                            if (Madara[i].estVivant == false)
+                            {
+                                Madara[i].estVivant = true;
+                                Madara[i].position.X = 1600;
+                                Madara[i].position.Y = random.Next();
+                                Madara[i].vitesse.X = random.Next(3, 9);
+                                Madara[i].vitesse.Y = random.Next(3, 9);
+                            }
                         }
                     }
-
                     if (Kunai.estVivant == true || Shuriken.estVivant == true && Shuriken2.estVivant == true || Shuriken3.estVivant == true)
                     {
                         if(Kunai.GetRect().Intersects(Shuriken3.GetRect()))
