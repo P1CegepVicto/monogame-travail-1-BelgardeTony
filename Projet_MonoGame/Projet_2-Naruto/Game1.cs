@@ -72,6 +72,12 @@ namespace Projet_2_Naruto
             Song song = Content.Load<Song>("sound//ThemeSong");
             MediaPlayer.Play(song);
 
+            if (dead <= 0)
+            {
+                Song son = Content.Load<Song>("sound//DeadSong");
+                MediaPlayer.Play(son);
+            }
+
             Naruto = new GameObject();
             Naruto.estVivant = true;
             Naruto.sprite = Content.Load<Texture2D>("Naruto.png");
@@ -102,7 +108,7 @@ namespace Projet_2_Naruto
             score = Content.Load<SpriteFont>("Font");
             Vie = Content.Load<SpriteFont>("Font");
 
-            Madara = new GameObject[5];
+            Madara = new GameObject[50];
 
             for (int i = 0; i < Madara.Length; i++)
             {
@@ -365,17 +371,19 @@ namespace Projet_2_Naruto
                     }
                 }
 
-                if (Naruto.estVivant == false)
+                if (dead > 0)
                 {
-                    if (Keyboard.GetState().IsKeyDown(Keys.Back))
+                    if (Naruto.estVivant == false)
                     {
-                        Naruto.estVivant = true;
-                        Naruto.position.X = 0;
-                        Naruto.position.Y = 0;
+                        if (Keyboard.GetState().IsKeyDown(Keys.Back))
+                        {
+                            Naruto.estVivant = true;
+                            Naruto.position.X = 0;
+                            Naruto.position.Y = 0;
 
+                        }
                     }
                 }
-
                 if (projectiletirer == i && Shuriken2.estVivant == false && Shuriken3.estVivant == false)
                 {
                     if (Madara[i].estVivant == true)
@@ -390,7 +398,7 @@ namespace Projet_2_Naruto
                         else if (Madara[i].position.X < Naruto.position.X)
                         {
                             Shuriken3.position.X = Madara[i].position.X + 50;
-                            Shuriken3.position.Y = Madara[i].position.Y + 100;
+                            Shuriken3.position.Y = Madara[i].position.Y + 50;
                             Shuriken3.estVivant = true;
                         }
                     }
@@ -483,12 +491,12 @@ namespace Projet_2_Naruto
 
             if (Shuriken2.estVivant == true)
             {
-                spriteBatch.Draw(Shuriken2.sprite, Shuriken2.position, origin: new Vector2(37/2, 38/2), rotation: rotate1 / 3);
+                spriteBatch.Draw(Shuriken2.sprite, Shuriken2.position, origin: new Vector2(37/2, 38/2), rotation: rotate1 /3);
             }
 
             if (Shuriken3.estVivant == true)
             {
-                spriteBatch.Draw(Shuriken3.sprite, Shuriken3.position, origin: new Vector2(37 / 2, 38 / 2), rotation: rotate / 3);
+                spriteBatch.Draw(Shuriken3.sprite, Shuriken3.position, origin: new Vector2(37/2, 38/2), rotation: rotate /3);
             }
 
             if (Kunai.estVivant == true)
