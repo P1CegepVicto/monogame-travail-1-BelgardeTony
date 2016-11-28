@@ -108,7 +108,7 @@ namespace Projet_2_Naruto
             score = Content.Load<SpriteFont>("Font");
             Vie = Content.Load<SpriteFont>("Font");
 
-            Madara = new GameObject[50];
+            Madara = new GameObject[5];
 
             for (int i = 0; i < Madara.Length; i++)
             {
@@ -386,7 +386,7 @@ namespace Projet_2_Naruto
                 }
                 if (projectiletirer == i && Shuriken2.estVivant == false && Shuriken3.estVivant == false)
                 {
-                    if (Madara[i].estVivant == true)
+                    if (Madara[i].estVivant == true && Naruto.estVivant == true)
                     {
                         if (Madara[i].position.X > Naruto.position.X)
                         {
@@ -467,6 +467,7 @@ namespace Projet_2_Naruto
             
                 for (int i = 0; i < Madara.Length; i++)
                 {
+                
                     if (Madara[i].position.X > Naruto.position.X)
                     {
                         if (Madara[i].estVivant == true)
