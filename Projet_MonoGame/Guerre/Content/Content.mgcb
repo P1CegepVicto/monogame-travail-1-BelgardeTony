@@ -13,9 +13,9 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin sound/01 - Shepherd Of Fire.mp3
+#begin sounds/GameSong.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
-/build:sound/01 - Shepherd Of Fire.mp3
+/build:sounds/GameSong.mp3
 

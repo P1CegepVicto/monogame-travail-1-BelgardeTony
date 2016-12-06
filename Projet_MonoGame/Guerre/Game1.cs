@@ -1,11 +1,10 @@
-﻿using Guerre;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System;
 
-namespace Projet_3_Guerre
+namespace Guerre
 {
     /// <summary>
     /// This is the main type for your game.
@@ -14,24 +13,37 @@ namespace Projet_3_Guerre
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
         Rectangle fenetre;
-        Texture2D background;
-        Texture2D mort;
-        Texture2D GameOver;
         Random random = new Random();
+        bool GameState;
+        bool start;
+
+        
+        Texture2D black;
+        Texture2D gameover;
+        
+        
         SpriteFont texte;
-        SpriteFont point;
+        SpriteFont score;
         SpriteFont vie;
-        SpriteFont projectile;
+        SpriteFont balle;
 
-        int scores = 0;
-        int lifes = 10;
-        int munition = 6;
+        int munitions = 6;
+        int point = 0;
+        int life = 3;
+        int projectile;
 
+        GameObject starts;
+        GameObject background2;
+        GameObject background;
         GameObject soldat;
-        GameObject[] enemie = new GameObject[1];
-        GameObject[] balle = new GameObject[6];
-        GameObject balle2;
+        GameObject enemi;
+        GameObject balles;
+        //GameObject[] enemi = new GameObject[1];
+        //GameObject[] balles = new GameObject[6];
+
+
 
         public Game1()
         {
@@ -52,7 +64,6 @@ namespace Projet_3_Guerre
             this.graphics.PreferredBackBufferHeight = graphics.GraphicsDevice.DisplayMode.Height;
             this.graphics.ToggleFullScreen();
             fenetre = new Rectangle(0, 0, graphics.GraphicsDevice.DisplayMode.Width, graphics.GraphicsDevice.DisplayMode.Height);
-
             base.Initialize();
         }
 
@@ -65,27 +76,60 @@ namespace Projet_3_Guerre
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Song song = Content.Load<Song>("sounds//01 - Shepherd Of Fire");
-            MediaPlayer.Play(song);
+            starts = new GameObject();
+            starts.estVivant = true;
+            starts.sprite = Content.Load<Texture2D>("starts.png");
+            starts.position.X = 750;
+            starts.position.Y = 450;
 
-            soldat = new GameObject();
-            soldat.estVivant = false;
-            soldat.sprite = Content.Load<Texture2D>("soldat.png");
+            black = Content.Load<Texture2D>("Dead.jpg");
+            gameover = Content.Load<Texture2D>("Gameover.png");
 
 
-            balle2 = new GameObject();
-            balle2.estVivant = false;
-            balle2.sprite = Content.Load<Texture2D>("balle.png");
+            if (GameState == true && start == false)
+            {
+                Song song = Content.Load<Song>("sounds//GameSong");
+                MediaPlayer.Play(song);
 
-            background = Content.Load<Texture2D>("background.jpg");
-            mort = Content.Load<Texture2D>("Dead.jpg");
-            GameOver = Content.Load<Texture2D>("Gameover.png");
+                soldat = new GameObject();
+                soldat.estVivant = true;
+                soldat.sprite = Content.Load<Texture2D>("soldat.png");
+                soldat.position.X = 0;
+                soldat.position.Y = 200;
 
-            texte = Content.Load<SpriteFont>("Font");
-            point = Content.Load<SpriteFont>("Font");
-            vie = Content.Load<SpriteFont>("Font");
-            projectile = Content.Load<SpriteFont>("Font");
+                enemi = new GameObject();
+                enemi.estVivant = true;
+                enemi.sprite = Content.Load<Texture2D>("enemie.png");
+                enemi.position.X = 1000;
+                enemi.position.Y = 200;
 
+                balles = new GameObject();
+                balles.estVivant = true;
+                balles.sprite = Content.Load<Texture2D>("balle.png");
+                balles.position.X = 600;
+                balles.position.Y = 200;
+
+                background = new GameObject();
+                background.estVivant = true;
+                background.sprite = Content.Load<Texture2D>("background.jpg");
+                background.position.X = 0;
+                background.position.Y = 0;
+                background.vitesse.X = -5;
+
+                background2 = new GameObject();
+                background2.sprite = Content.Load<Texture2D>("background.jpg");
+                background2.position.X = 1920;
+                background2.position.Y = 0;
+                background2.vitesse.X = -5;
+
+                
+
+                //texte = Content.Load<SpriteFont>("Font");
+                //score = Content.Load<SpriteFont>("Font");
+                //vie = Content.Load<SpriteFont>("Font");
+                //balle = Content.Load<SpriteFont>("Font");
+            }
+            
 
             // TODO: use this.Content to load your game content here
         }
@@ -109,31 +153,50 @@ namespace Projet_3_Guerre
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            //if (background2.position.X == fenetre.Left)
+            //{
+            //    background.position.X = background2.position.X + background2.sprite.Width;
+            //}
+            //if (background.position.X == fenetre.Left)
+            //{
+            //    background2.position.X = background.position.X + background.sprite.Width;
+            //}
 
-            MoveEnemie();
-            MoveSoldat();
+
+            // TODO: Add your update logic here
+            UpdateSoldat();
+            UpdateEnemi();
             UpdateProjectile();
+            //UpdateBackground();
+            //UpdateBackground2();
+
             base.Update(gameTime);
         }
 
-        protected void MoveEnemie()
+        //protected void UpdateBackground2()
+        //{
+        //    background2.position += background2.vitesse;
+        //}
+
+        //protected void UpdateBackground()
+        //{
+        //    background.position += background.vitesse;
+        //}
+
+        protected void UpdateSoldat()
         {
 
         }
 
-
-        protected void MoveSoldat()
+        protected void UpdateEnemi()
         {
 
         }
-
 
         protected void UpdateProjectile()
         {
-            //balle[i].position.X += 40; 
-        }
 
+        }
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -143,13 +206,26 @@ namespace Projet_3_Guerre
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
+            // TODO: Add your drawing code here
 
-            spriteBatch.DrawString(texte, "time:" + gameTime.TotalGameTime.TotalSeconds.ToString(), new Vector2(50, 0), Color.Black);
+            
+                spriteBatch.Draw(black, new Rectangle(0, 0 , graphics.GraphicsDevice.DisplayMode.Width,graphics.GraphicsDevice.DisplayMode.Height),Color.White);
+            spriteBatch.Draw(starts.sprite, starts.position, Color.White);
+            //if (GameState == true && start == false)
+            //{
+            //    spriteBatch.Draw(background.sprite, background.position, Color.White);
+            //    spriteBatch.Draw(background2.sprite, background2.position, effects: SpriteEffects.FlipHorizontally);
+
+            //    spriteBatch.Draw(soldat.sprite, soldat.position, Color.White);
+            //    spriteBatch.Draw(enemi.sprite, enemi.position, Color.White);
+            //    spriteBatch.Draw(balles.sprite, balles.position, Color.White);
+
+            //}
+
+
 
 
             spriteBatch.End();
-            // TODO: Add your drawing code here
-
             base.Draw(gameTime);
         }
     }
