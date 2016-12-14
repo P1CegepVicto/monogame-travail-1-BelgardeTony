@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projet_01", "Projet_01\Proj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projet_2-Naruto", "Projet_2-Naruto\Projet_2-Naruto.csproj", "{08CF2FB6-EB70-4830-93F3-C7A2CB6428B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guerre", "Guerre\Guerre.csproj", "{B7C4EA9F-245B-497C-9E8E-DDB8D11072F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -21,6 +23,10 @@ Global
 		{08CF2FB6-EB70-4830-93F3-C7A2CB6428B9}.Debug|x86.Build.0 = Debug|x86
 		{08CF2FB6-EB70-4830-93F3-C7A2CB6428B9}.Release|x86.ActiveCfg = Release|x86
 		{08CF2FB6-EB70-4830-93F3-C7A2CB6428B9}.Release|x86.Build.0 = Release|x86
+		{B7C4EA9F-245B-497C-9E8E-DDB8D11072F8}.Debug|x86.ActiveCfg = Debug|x86
+		{B7C4EA9F-245B-497C-9E8E-DDB8D11072F8}.Debug|x86.Build.0 = Debug|x86
+		{B7C4EA9F-245B-497C-9E8E-DDB8D11072F8}.Release|x86.ActiveCfg = Release|x86
+		{B7C4EA9F-245B-497C-9E8E-DDB8D11072F8}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

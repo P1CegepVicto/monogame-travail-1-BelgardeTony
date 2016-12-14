@@ -40,7 +40,7 @@ namespace Guerre
         GameObject soldat;
         //GameObject enemie;
         GameObject balles;
-        GameObject[] enemie = new GameObject[5];
+        GameObject[] enemie = new GameObject[2];
         GameObject[] balles2 = new GameObject[6];
 
 
@@ -139,12 +139,12 @@ namespace Guerre
 
 
 
-                //texte = Content.Load<SpriteFont>("Font");
-                //score = Content.Load<SpriteFont>("Font");
-                //vie = Content.Load<SpriteFont>("Font");
-                //balle = Content.Load<SpriteFont>("Font");
+            texte = Content.Load<SpriteFont>("Font");
+            score = Content.Load<SpriteFont>("Font");
+            vie = Content.Load<SpriteFont>("Font");
+            balle = Content.Load<SpriteFont>("Font");
             //}
-            
+
 
             // TODO: use this.Content to load your game content here
         }
@@ -181,7 +181,6 @@ namespace Guerre
             // TODO: Add your update logic here
             UpdateSoldat();
             UpdateEnemi();
-            UpdateProjectile(gameTime);
             UpdateBackground();
             UpdateBackground2();
 
@@ -224,7 +223,45 @@ namespace Guerre
 
         protected void UpdateEnemi()
         {
-            
+            //Projectile********************************
+            if (soldat.estVivant == true)
+            {
+                for (int i = 0; i < balles2.Length; i++)
+                {
+                    balles2[i].position.X += 20;
+                    if (balles2[i].estVivant == false)
+                    {
+                        if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                        {
+                            balles2[i].estVivant = true;
+                            balles2[i].position.X = soldat.position.X + 150;
+                            balles2[i].position.Y = soldat.position.Y + 50;
+                            munitions -= 1;
+                            Song son = Content.Load<Song>("sounds//Fusil");
+                            MediaPlayer.Play(son);
+                        }
+                    }
+                    if (munitions <= 5 || munitions == 0)
+                    {
+                        if (Keyboard.GetState().IsKeyDown(Keys.R))
+                        {
+                            munitions = 6;
+                        }
+                    }
+                    if (balles2[i].position.X >= fenetre.Right || munitions == 0)
+                    {
+                        balles2[i].estVivant = false;
+                    }
+                }
+
+                balles.position.X -= 20;
+                if (balles.position.X < fenetre.Left)
+                {
+                    balles.estVivant = false;
+                }
+            }
+
+            //enemie****************************************************************
             for (int i = 0; i < enemie.Length; i++)
             {
                 enemie[i].position += enemie[i].vitesse;
@@ -256,10 +293,10 @@ namespace Guerre
                 if (enemie[i].estVivant == false)
                 {
                     enemie[i].estVivant = true;
-                    enemie[i].position.X = random.Next(500, fenetre.Right);
+                    enemie[i].position.X = fenetre.Right;
                     enemie[i].position.Y = random.Next();
                     enemie[i].vitesse.X = -10;
-                    enemie[i].vitesse.Y = random.Next(10, 20);
+                    enemie[i].vitesse.Y = random.Next(5, 20);
                 }
                 if (balles.estVivant == false && soldat.estVivant == true && enemie[i].estVivant == true)
                 {
@@ -269,40 +306,69 @@ namespace Guerre
                         balles.position.X = enemie[i].position.X + 50;
                         balles.position.Y = enemie[i].position.Y + 100;
                         balles.estVivant = true;
+                        Song son = Content.Load<Song>("sounds//Fusil");
+                        MediaPlayer.Play(son);
                     }
                 }
-            }
-        }
 
-        protected void UpdateProjectile(GameTime gameTime)
-        {
-            
-            if (soldat.estVivant == true)
-            {
-                for (int i = 0; i < balles2.Length; i++)
+                if (soldat.estVivant == true && enemie[i].estVivant == true && balles.estVivant == true || balles2[i].estVivant == true)
                 {
-                    balles2[i].position.X += 30;
-                    if (balles2[i].estVivant == false)
+                    if (enemie[i].estVivant == true && soldat.estVivant == true)
                     {
-                        if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                        if (soldat.GetRect().Intersects(enemie[i].GetRect()))
                         {
-                            balles2[i].estVivant = true;
-                            balles2[i].position.X = soldat.position.X + 150;
-                            balles2[i].position.Y = soldat.position.Y + 50;
-                            munitions = munitions - 1;
+                            soldat.estVivant = false;
+                            balles.estVivant = false;
+                            balles2[i].estVivant = false;
+                            life -= 1;
                         }
                     }
-                    if (balles2[i].position.X == fenetre.Right)
+                    if (soldat.estVivant == true && balles.estVivant == true)
                     {
-                        balles2[i].estVivant = false;
+                        if (soldat.GetRect().Intersects(balles.GetRect()))
+                        {
+                            soldat.estVivant = false;
+                            balles.estVivant = false;
+                            balles2[i].estVivant = false;
+                            life -= 1;
+                        }
+                    }
+
+                    if (balles2[i].estVivant == true && enemie[i].estVivant == true && soldat.estVivant == true)
+                    {
+
+                        if (enemie[i].GetRect().Intersects(balles2[i].GetRect()))
+                        {
+                            enemie[i].estVivant = false;
+                            balles2[i].estVivant = false;
+                            balles.estVivant = false;
+                            point += 1;
+                        }
+                    }
+
+                    if (balles2[i].estVivant == true && balles.estVivant == true)
+                    {
+                        if (balles.GetRect().Intersects(balles2[i].GetRect()))
+                        {
+                            balles.estVivant = false;
+                            balles2[i].estVivant = false;
+                        }
                     }
                 }
 
-                balles.position.X -= 20;
-                if (balles.position.X < fenetre.Left)
+                if (life > 0)
                 {
-                    balles.estVivant = false;
-                } 
+                    if (soldat.estVivant == false)
+                    {
+                        if (Keyboard.GetState().IsKeyDown(Keys.T))
+                        {
+                            soldat.estVivant = true;
+                            soldat.position.X = 0;
+                            soldat.position.Y = 100;
+
+                        }
+                    }
+                }
             }
         }
 
@@ -323,19 +389,32 @@ namespace Guerre
             //{
             spriteBatch.Draw(background.sprite, background.position, Color.White);
             spriteBatch.Draw(background2.sprite, background2.position, effects: SpriteEffects.FlipHorizontally);
+            spriteBatch.DrawString(vie, " Vie: " + life.ToString(), new Vector2(850, 0), Color.Black);
+            spriteBatch.DrawString(balle, " Balles: " + munitions.ToString(), new Vector2(1700, 1000), Color.Black);
+            spriteBatch.DrawString(score, " Score: " + point.ToString(), new Vector2(1700, 0), Color.Black);
 
-            spriteBatch.Draw(soldat.sprite, soldat.position);
+            if (soldat.estVivant == true)
+            {
+                spriteBatch.Draw(soldat.sprite, soldat.position);
+            }
+
+            if (balles.estVivant == true)
+            {
+                spriteBatch.Draw(balles.sprite, balles.position);
+            }
+
             
-            spriteBatch.Draw(balles.sprite, balles.position);
-
             for (int i = 0; i < enemie.Length; i++)
             {
-                spriteBatch.Draw(enemie[i].sprite, enemie[i].position);
+                if (enemie[i].estVivant == true)
+                {
+                    spriteBatch.Draw(enemie[i].sprite, enemie[i].position);
+                }
             }
 
             for (int i = 0; i < balles2.Length; i++)
             {
-                if (balles2[i].estVivant == true)
+                if (balles2[i].estVivant == true && soldat.estVivant == true)
                 {
                     spriteBatch.Draw(balles2[i].sprite, balles2[i].position, effects: SpriteEffects.FlipHorizontally);
                 }
