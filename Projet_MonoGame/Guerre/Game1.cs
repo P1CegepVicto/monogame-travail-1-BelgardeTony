@@ -31,7 +31,7 @@ namespace Guerre
 
         int munitions = 6;
         int point = 0;
-        int life = 3;
+        int life = 20;
         int projectile;
 
         GameObject starts;
@@ -40,7 +40,7 @@ namespace Guerre
         GameObject soldat;
         //GameObject enemie;
         GameObject balles;
-        GameObject[] enemie = new GameObject[2];
+        GameObject[] enemie = new GameObject[3];
         GameObject[] balles2 = new GameObject[6];
 
 
@@ -180,7 +180,7 @@ namespace Guerre
 
             // TODO: Add your update logic here
             UpdateSoldat();
-            UpdateEnemi();
+            UpdateEnemi(gameTime);
             UpdateBackground();
             UpdateBackground2();
 
@@ -221,43 +221,165 @@ namespace Guerre
             }
         }
 
-        protected void UpdateEnemi()
+        protected void UpdateEnemi(GameTime gameTime)
         {
             //Projectile********************************
             if (soldat.estVivant == true)
             {
-                for (int i = 0; i < balles2.Length; i++)
-                {
-                    balles2[i].position.X += 20;
-                    if (balles2[i].estVivant == false)
+                
+                    if (Keyboard.GetState().IsKeyDown(Keys.Space) && gameTime.TotalGameTime.Seconds % 1 == 0)
                     {
-                        if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                        {
-                            balles2[i].estVivant = true;
-                            balles2[i].position.X = soldat.position.X + 150;
-                            balles2[i].position.Y = soldat.position.Y + 50;
+                    
+                        if (random.Next(0, 6) == 0 && balles2[0].estVivant == false && munitions > 0 && munitions <= 6)
+                    { 
+                            balles2[0].estVivant = true;
+                            balles2[0].position.X = soldat.position.X + 150;
+                            balles2[0].position.Y = soldat.position.Y + 50;
                             munitions -= 1;
                             Song son = Content.Load<Song>("sounds//Fusil");
                             MediaPlayer.Play(son);
-                        }
                     }
-                    if (munitions <= 5 || munitions == 0)
-                    {
-                        if (Keyboard.GetState().IsKeyDown(Keys.R))
+                    
+                        if (random.Next(0, 6) == 1 && balles2[1].estVivant == false && munitions > 0 && munitions <= 6)
                         {
-                            munitions = 6;
-                        }
+                            balles2[1].estVivant = true;
+                            balles2[1].position.X = soldat.position.X + 150;
+                            balles2[1].position.Y = soldat.position.Y + 50;
+                            munitions -= 1;
+                            Song son = Content.Load<Song>("sounds//Fusil");
+                            MediaPlayer.Play(son);
+                        
                     }
-                    if (balles2[i].position.X >= fenetre.Right || munitions == 0)
-                    {
-                        balles2[i].estVivant = false;
+                    
+                        if (random.Next(0, 6) == 2 && balles2[2].estVivant == false && munitions > 0 && munitions <= 6)
+                        {
+                            balles2[2].estVivant = true;
+                            balles2[2].position.X = soldat.position.X + 150;
+                            balles2[2].position.Y = soldat.position.Y + 50;
+                            munitions -= 1;
+                            Song son = Content.Load<Song>("sounds//Fusil");
+                            MediaPlayer.Play(son);
+                        
+                    }
+                    
+                        if (random.Next(0, 6) == 3 && balles2[3].estVivant == false && munitions > 0 && munitions <= 6)
+                        {
+                            balles2[3].estVivant = true;
+                            balles2[3].position.X = soldat.position.X + 150;
+                            balles2[3].position.Y = soldat.position.Y + 50;
+                            munitions -= 1;
+                            Song son = Content.Load<Song>("sounds//Fusil");
+                            MediaPlayer.Play(son);
+                        
+                    }
+                    
+                        if (random.Next(0, 6) == 4 && balles2[4].estVivant == false && munitions > 0 && munitions <= 6)
+                        {
+                            balles2[4].estVivant = true;
+                            balles2[4].position.X = soldat.position.X + 150;
+                            balles2[4].position.Y = soldat.position.Y + 50;
+                            munitions -= 1;
+                            Song son = Content.Load<Song>("sounds//Fusil");
+                            MediaPlayer.Play(son);
+                        
+                    }
+                    if (random.Next(0, 6) == 5 && balles2[5].estVivant == false && munitions > 0 && munitions <= 6)
+                        {
+                            balles2[5].estVivant = true;
+                            balles2[5].position.X = soldat.position.X + 150;
+                            balles2[5].position.Y = soldat.position.Y + 50;
+                            munitions -= 1;
+                            Song son = Content.Load<Song>("sounds//Fusil");
+                            MediaPlayer.Play(son);
+                        
                     }
                 }
+                if (munitions <= 5 && munitions >= 0)
+                {
+                    if (Keyboard.GetState().IsKeyDown(Keys.R))
+                    {
+                        munitions = 6;
+                    }
+                }
+                if (balles2[0].estVivant == true || balles2[1].estVivant == true || balles2[2].estVivant == true || balles2[3].estVivant == true || balles2[4].estVivant == true || balles2[5].estVivant == true)
+                {
+                    balles2[0].position.X += 20;
+                    balles2[1].position.X += 20;
+                    balles2[2].position.X += 20;
+                    balles2[3].position.X += 20;
+                    balles2[4].position.X += 20;
+                    balles2[5].position.X += 20;
+                    if (balles2[0].position.X >= fenetre.Right)
+                    {
+                        balles2[0].estVivant = false;
+                        balles2[0].position.X = -5;
+                        balles2[0].position.Y = -5;
+                    }
+                    if (balles2[1].position.X >= fenetre.Right)
+                    {
+                        balles2[1].estVivant = false;
+                        balles2[1].position.X = -5;
+                        balles2[1].position.Y = -5;
+                    }
+                    if (balles2[2].position.X >= fenetre.Right)
+                    {
+                        balles2[2].estVivant = false;
+                        balles2[2].position.X = -5;
+                        balles2[2].position.Y = -5;
+                    }
+                    if (balles2[3].position.X >= fenetre.Right)
+                    {
+                        balles2[3].estVivant = false;
+                        balles2[3].position.X = -5;
+                        balles2[3].position.Y = -5;
+                    }
+                    if (balles2[4].position.X >= fenetre.Right)
+                    {
+                        balles2[4].estVivant = false;
+                        balles2[4].position.X = -5;
+                        balles2[4].position.Y = -5;
+                    }
+                    if (balles2[5].position.X >= fenetre.Right)
+                    {
+                        balles2[5].estVivant = false;
+                        balles2[5].position.X = -5;
+                        balles2[5].position.Y = -5;
+                    }
+                }
+                //for (int i = 0; i < balles2.Length; i++)
+                //{
+                //    balles2[i].position.X += 20;
+                //    if (balles2[i].estVivant == false)
+                //    {
+                //        if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                //        {
+                //            balles2[i].estVivant = true;
+                //            balles2[i].position.X = soldat.position.X + 150;
+                //            balles2[i].position.Y = soldat.position.Y + 50;
+                //            munitions -= 1;
+                //            Song son = Content.Load<Song>("sounds//Fusil");
+                //            MediaPlayer.Play(son);
+                //        }
+                //    }
+                //    if (munitions <= 5 || munitions == 0)
+                //    {
+                //        if (Keyboard.GetState().IsKeyDown(Keys.R))
+                //        {
+                //            munitions = 6;
+                //        }
+                //    }
+                //    if (balles2[i].position.X >= fenetre.Right || munitions == 0)
+                //    {
+                //        balles2[i].estVivant = false;
+                //    }
+                //}
 
                 balles.position.X -= 20;
                 if (balles.position.X < fenetre.Left)
                 {
                     balles.estVivant = false;
+                    balles.position.X = -10;
+                    balles.position.Y = -10;
                 }
             }
 
@@ -319,6 +441,8 @@ namespace Guerre
                         {
                             soldat.estVivant = false;
                             balles.estVivant = false;
+                            balles2[i].position.X = -5;
+                            balles2[i].position.Y = -5;
                             balles2[i].estVivant = false;
                             life -= 1;
                         }
@@ -329,18 +453,55 @@ namespace Guerre
                         {
                             soldat.estVivant = false;
                             balles.estVivant = false;
+                            balles2[i].position.X = -5;
+                            balles2[i].position.Y = -5;
                             balles2[i].estVivant = false;
                             life -= 1;
                         }
                     }
 
-                    if (balles2[i].estVivant == true && enemie[i].estVivant == true && soldat.estVivant == true)
+                    if (balles2[0].estVivant == true || balles2[1].estVivant == true || balles2[2].estVivant == true || balles2[3].estVivant == true || balles2[4].estVivant == true || balles2[5].estVivant == true && enemie[i].estVivant == true && soldat.estVivant == true)
                     {
 
-                        if (enemie[i].GetRect().Intersects(balles2[i].GetRect()))
+                        if (enemie[i].GetRect().Intersects(balles2[0].GetRect()))
                         {
                             enemie[i].estVivant = false;
-                            balles2[i].estVivant = false;
+                            balles2[0].estVivant = false;
+                            balles.estVivant = false;
+                            point += 1;
+                        }
+                        if (enemie[i].GetRect().Intersects(balles2[1].GetRect()))
+                        {
+                            enemie[i].estVivant = false;
+                            balles2[1].estVivant = false;
+                            balles.estVivant = false;
+                            point += 1;
+                        }
+                        if (enemie[i].GetRect().Intersects(balles2[2].GetRect()))
+                        {
+                            enemie[i].estVivant = false;
+                            balles2[2].estVivant = false;
+                            balles.estVivant = false;
+                            point += 1;
+                        }
+                        if (enemie[i].GetRect().Intersects(balles2[3].GetRect()))
+                        {
+                            enemie[i].estVivant = false;
+                            balles2[3].estVivant = false;
+                            balles.estVivant = false;
+                            point += 1;
+                        }
+                        if (enemie[i].GetRect().Intersects(balles2[4].GetRect()))
+                        {
+                            enemie[i].estVivant = false;
+                            balles2[4].estVivant = false;
+                            balles.estVivant = false;
+                            point += 1;
+                        }
+                        if (enemie[i].GetRect().Intersects(balles2[5].GetRect()))
+                        {
+                            enemie[i].estVivant = false;
+                            balles2[5].estVivant = false;
                             balles.estVivant = false;
                             point += 1;
                         }
@@ -348,10 +509,35 @@ namespace Guerre
 
                     if (balles2[i].estVivant == true && balles.estVivant == true)
                     {
-                        if (balles.GetRect().Intersects(balles2[i].GetRect()))
+                        if (balles.GetRect().Intersects(balles2[0].GetRect()))
                         {
                             balles.estVivant = false;
-                            balles2[i].estVivant = false;
+                            balles2[0].estVivant = false;
+                        }
+                        if (balles.GetRect().Intersects(balles2[1].GetRect()))
+                        {
+                            balles.estVivant = false;
+                            balles2[1].estVivant = false;
+                        }
+                        if (balles.GetRect().Intersects(balles2[2].GetRect()))
+                        {
+                            balles.estVivant = false;
+                            balles2[2].estVivant = false;
+                        }
+                        if (balles.GetRect().Intersects(balles2[3].GetRect()))
+                        {
+                            balles.estVivant = false;
+                            balles2[3].estVivant = false;
+                        }
+                        if (balles.GetRect().Intersects(balles2[4].GetRect()))
+                        {
+                            balles.estVivant = false;
+                            balles2[4].estVivant = false;
+                        }
+                        if (balles.GetRect().Intersects(balles2[5].GetRect()))
+                        {
+                            balles.estVivant = false;
+                            balles2[5].estVivant = false;
                         }
                     }
                 }
@@ -363,8 +549,9 @@ namespace Guerre
                         if (Keyboard.GetState().IsKeyDown(Keys.T))
                         {
                             soldat.estVivant = true;
-                            soldat.position.X = 0;
+                            soldat.position.X = fenetre.Left;
                             soldat.position.Y = 100;
+                            munitions = 6;
 
                         }
                     }
