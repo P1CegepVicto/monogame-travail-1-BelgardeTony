@@ -16,8 +16,8 @@ namespace Guerre
 
         Rectangle fenetre;
         Random random = new Random();
-        bool GameState;
-        bool start;
+        bool play = false;
+        bool startMenu = true;
 
         
         Texture2D black;
@@ -31,14 +31,12 @@ namespace Guerre
 
         int munitions = 6;
         int point = 0;
-        int life = 20;
-        int projectile;
+        int life = 5;
 
         GameObject starts;
         GameObject background2;
         GameObject background;
         GameObject soldat;
-        //GameObject enemie;
         GameObject balles;
         GameObject[] enemie = new GameObject[3];
         GameObject[] balles2 = new GameObject[6];
@@ -179,15 +177,15 @@ namespace Guerre
 
 
             // TODO: Add your update logic here
-            UpdateSoldat();
-            UpdateEnemi(gameTime);
-            UpdateBackground();
-            UpdateBackground2();
-
+           
+                    UpdateSoldat();
+                    UpdateEnemi(gameTime);
+                    UpdateBackground();
+                    UpdateBackground2();
             base.Update(gameTime);
         }
 
-        protected void UpdateBackground2()
+         protected void UpdateBackground2()
         {
             background2.position += background2.vitesse;
         }
@@ -556,6 +554,29 @@ namespace Guerre
                         }
                     }
                 }
+                if (life <= 0 && soldat.estVivant == false)
+                {
+                    enemie[i].estVivant = false;
+                    balles.estVivant = false;
+                    if (Keyboard.GetState().IsKeyDown(Keys.Back))
+                    {
+                        point = 0;
+                        life = 5;
+                        soldat.estVivant = true;
+                        enemie[i].estVivant = true;
+                    }
+                }
+                if (startMenu == true)
+                {
+                    enemie[i].estVivant = false;
+                    point = 0;
+                    soldat.estVivant = false;
+                    if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                    {
+                        startMenu = false;
+                        soldat.estVivant = true;
+                    }
+                }
             }
         }
 
@@ -569,48 +590,58 @@ namespace Guerre
             spriteBatch.Begin();
             // TODO: Add your drawing code here
 
-
-            //    spriteBatch.Draw(black, new Rectangle(0, 0 , graphics.GraphicsDevice.DisplayMode.Width,graphics.GraphicsDevice.DisplayMode.Height),Color.White);
-            //spriteBatch.Draw(starts.sprite, starts.position, Color.White);
-            //if (GameState == true && start == false)
-            //{
-            spriteBatch.Draw(background.sprite, background.position, Color.White);
-            spriteBatch.Draw(background2.sprite, background2.position, effects: SpriteEffects.FlipHorizontally);
-            spriteBatch.DrawString(vie, " Vie: " + life.ToString(), new Vector2(850, 0), Color.Black);
-            spriteBatch.DrawString(balle, " Balles: " + munitions.ToString(), new Vector2(1700, 1000), Color.Black);
-            spriteBatch.DrawString(score, " Score: " + point.ToString(), new Vector2(1700, 0), Color.Black);
-
-            if (soldat.estVivant == true)
+            if (startMenu == true)
             {
-                spriteBatch.Draw(soldat.sprite, soldat.position);
+                spriteBatch.Draw(black, new Rectangle(0, 0, graphics.GraphicsDevice.DisplayMode.Width, graphics.GraphicsDevice.DisplayMode.Height), Color.White);
+                spriteBatch.Draw(starts.sprite, starts.position, Color.White);
+                
             }
-
-            if (balles.estVivant == true)
+            if (startMenu == false)
             {
-                spriteBatch.Draw(balles.sprite, balles.position);
-            }
 
-            
-            for (int i = 0; i < enemie.Length; i++)
-            {
-                if (enemie[i].estVivant == true)
+                spriteBatch.Draw(background.sprite, background.position, Color.White);
+                spriteBatch.Draw(background2.sprite, background2.position, effects: SpriteEffects.FlipHorizontally);
+                spriteBatch.DrawString(vie, " Vie: " + life.ToString(), new Vector2(850, 0), Color.Black);
+                spriteBatch.DrawString(balle, " Balles: " + munitions.ToString(), new Vector2(1700, 1000), Color.Black);
+                spriteBatch.DrawString(score, " Score: " + point.ToString(), new Vector2(1700, 0), Color.Black);
+
+                if (soldat.estVivant == true)
                 {
-                    spriteBatch.Draw(enemie[i].sprite, enemie[i].position);
+                    spriteBatch.Draw(soldat.sprite, soldat.position);
+                }
+
+                if (balles.estVivant == true)
+                {
+                    spriteBatch.Draw(balles.sprite, balles.position);
+                }
+
+
+                for (int i = 0; i < enemie.Length; i++)
+                {
+                    if (enemie[i].estVivant == true)
+                    {
+                        spriteBatch.Draw(enemie[i].sprite, enemie[i].position);
+                    }
+                }
+
+                for (int i = 0; i < balles2.Length; i++)
+                {
+                    if (balles2[i].estVivant == true && soldat.estVivant == true)
+                    {
+                        spriteBatch.Draw(balles2[i].sprite, balles2[i].position, effects: SpriteEffects.FlipHorizontally);
+                    }
                 }
             }
-
-            for (int i = 0; i < balles2.Length; i++)
+            if (life <= 0 && soldat.estVivant == false)
             {
-                if (balles2[i].estVivant == true && soldat.estVivant == true)
-                {
-                    spriteBatch.Draw(balles2[i].sprite, balles2[i].position, effects: SpriteEffects.FlipHorizontally);
-                }
-           }
-            
+                spriteBatch.Draw(black, new Rectangle(0, 0, graphics.GraphicsDevice.DisplayMode.Width, graphics.GraphicsDevice.DisplayMode.Height), Color.White);
 
-            //}
+                spriteBatch.Draw(gameover, new Rectangle(0, 0, graphics.GraphicsDevice.DisplayMode.Width, graphics.GraphicsDevice.DisplayMode.Height), Color.White);
 
+                spriteBatch.DrawString(score, " Score: " + point.ToString(), new Vector2(850, 600), Color.White);
 
+                
+            }
 
 
             spriteBatch.End();
